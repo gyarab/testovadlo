@@ -8,6 +8,6 @@ RUN mkdir -p /output
 #
 # Tests
 #
-RUN ln -s /tasks/unpack.py /run.d/01-unpack_arg0.py; \
-	ln -s /tasks/compile.sh /run.d/10-compile.sh; \
-	ln -s /tasks/checkstyle.sh /run.d/11-checkstyle.sh
+RUN ln -s /tasks/unpack /run.d/01-unpack_arg0; \
+	ln -s /tasks/compile /run.d/10-compile; \
+	ln -s /tasks/checkstyle /run.d/11-checkstyle
