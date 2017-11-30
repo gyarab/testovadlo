@@ -12,10 +12,15 @@ touch /data/build/.mainclass
 vloz=$(grep -i '\bVloz$' /data/build/.mainclass | head -1)
 [[ ! -z $vloz ]] || { echo "chybí program 'Vloz'"; exit 1; }
 seznam=$(grep -i '\bSeznam$' /data/build/.mainclass | head -1)
-[[ ! -z $seznam ]] || { echo "chybí program 'Vloz'"; exit 1; }
+[[ ! -z $seznam ]] || { echo "chybí program 'Seznam'"; exit 1; }
 
 echo "  java -cp $(jj "${jars[@]}") $vloz"
-echo -e "Jan\nLana\n123456789\n\n" | java -cp $(jj "${jars[@]}") $vloz
+echo -e "Jan\nLana\n123456789\n\n" | java -cp $(jj "${jars[@]}") $vloz 2>&1 |grep -v '^WARNING:'
 
-echo "  java -cp $(jj "${jars[@]}") $seznem"
-java -cp $(jj "${jars[@]}") $vloz
+echo "  java -cp $(jj "${jars[@]}") $seznam"
+java -cp $(jj "${jars[@]}") $seznam | grep -v '^WARNING:' |grep -v '^Security framework'
+
+[[ ! -f seznam.xml ]] || {
+	echo "$ xmllint --format < seznam.xml"
+	xmllint --format < seznam.xml | perl -pe 's/^/  /'
+}
