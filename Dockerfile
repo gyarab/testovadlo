@@ -8,4 +8,4 @@ RUN mkdir -p /output
 #
 # Tests
 #
-RUN ln -s /tasks/dump /run.d/10-dump
+RUN ln -s /tasks/dump /test.d/10-dump
