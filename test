@@ -8,6 +8,5 @@ touch /data/build/.mainclass
 [[ $(cat /data/build/.mainclass | wc -l) -ne 0 ]] ||  { echo "chybí main() metoda"; exit 1; }
 
 main=$(head -1 /data/build/.mainclass)
-
 echo -e "  java $main\n    5"
-echo -e "5\n\n" | java "$main"
+echo -e "5\n\n" | java -cp /data/build "$main"
