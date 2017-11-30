@@ -13,3 +13,6 @@ RUN ln -s /tasks/unpack /test.d/01-unpack_arg0; \
 	ln -s /tasks/checkstyle /test.d/11-checkstyle
 
 ADD http://repo1.maven.org/maven2/com/thoughtworks/xstream/xstream/1.4.10/xstream-1.4.10.jar /xstream-1.4.10.jar
+
+COPY test /test
+COPY arg0.json /data/

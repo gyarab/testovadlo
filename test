@@ -1,0 +1,21 @@
+#!/bin/bash
+
+function jj { local IFS=":"; echo "$*"; }
+
+set -e
+
+echo "$ test"
+jars=( $(find / -maxdepth 1 -type f -name '*.jar') /data/build )
+
+touch /data/build/.mainclass
+
+vloz=$(grep -i '\bVloz$' /data/build/.mainclass | head -1)
+[[ ! -z $vloz ]] || { echo "chybí program 'Vloz'"; exit 1; }
+seznam=$(grep -i '\bSeznam$' /data/build/.mainclass | head -1)
+[[ ! -z $seznam ]] || { echo "chybí program 'Vloz'"; exit 1; }
+
+echo "  java -cp $(jj "${jars[@]}") $vloz"
+echo -e "Jan\nLana\n123456789\n\n" | java -cp $(jj "${jars[@]}") $vloz
+
+echo "  java -cp $(jj "${jars[@]}") $seznem"
+java -cp $(jj "${jars[@]}") $vloz
