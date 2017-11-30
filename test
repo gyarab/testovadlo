@@ -1,24 +1,18 @@
 #!/bin/bash
 
-function jj { local IFS=":"; echo "$*"; }
-
-set -e
-
 echo "$ test"
-jars=( $(find / -maxdepth 1 -type f -name '*.jar') /data/build )
 
 touch /data/build/.mainclass
-
 vloz=$(grep -i '\bVloz$' /data/build/.mainclass | head -1)
 [[ ! -z $vloz ]] || { echo "chybí program 'Vloz'"; exit 1; }
 seznam=$(grep -i '\bSeznam$' /data/build/.mainclass | head -1)
 [[ ! -z $seznam ]] || { echo "chybí program 'Seznam'"; exit 1; }
 
-echo "  java -cp $(jj "${jars[@]}") $vloz"
-echo -e "Jan\nLana\n123456789\n\n" | java -cp $(jj "${jars[@]}") $vloz 2>&1 |grep -v '^WARNING:'
+echo "  java -cp xstream.jar $vloz"
+echo -e "Jan\nLana\n123456789\n\n" | java -cp xtream-1.4.10.jar:/data/build $vloz 2>&1 | grep -v '^WARNING:'
 
-echo "  java -cp $(jj "${jars[@]}") $seznam"
-java -cp $(jj "${jars[@]}") $seznam | grep -v '^WARNING:' |grep -v '^Security framework'
+echo "  java -cp xstream.jar $seznam"
+java -cp xtream-1.4.10.jar:/data/build $seznam | grep -v '^WARNING:' |grep -v '^Security framework'
 
 [[ ! -f seznam.xml ]] || {
 	echo "$ xmllint --format < seznam.xml"
