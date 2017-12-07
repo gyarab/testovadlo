@@ -8,10 +8,12 @@ vloz=$(grep -i '\bVloz$' /data/build/.mainclass | head -1)
 seznam=$(grep -i '\bSeznam$' /data/build/.mainclass | head -1)
 [[ ! -z $seznam ]] || { echo "chybí program 'Seznam'"; exit 1; }
 
-echo "$ java -cp xstream.jar $vloz\nJan\nLana\n123456789\n\n"
+find /data/build
+
+echo -e "$ java -cp xstream.jar $vloz\nJan\nLana\n123456789\n\n"
 echo -e "Jan\nLana\n123456789\n\n" | (cd /data/build; java -cp /xtream-1.4.10.jar $vloz) 2>&1 | grep -v '^WARNING:'
 
-echo "$ java -cp xstream.jar $vloz\nPepa\nZdepa\n121212\n\n"
+echo -e "$ java -cp xstream.jar $vloz\nPepa\nZdepa\n121212\n\n"
 echo -e "Pepa\nZdepa\n121212\n\n" | (cd /data/build; java -cp /xtream-1.4.10.jar $vloz) 2>&1 | grep -v '^WARNING:'
 
 echo "$ java -cp xstream.jar $seznam"
