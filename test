@@ -12,6 +12,6 @@ echo $(cut -c 1-80 <<<"$out2")...
 
 [[ $out1 != $out2 ]] || { echo "program nevrací náhodná čísla, dvakrát vrátil to samé"; exit 1; }
 
-out=$(tr ' ' '\n' <<<"$out1")
+out=$(tr ' ' '\n' <<<"$out1" | sort) 
 
-[[ $(sort <<<"$out"| wc -l) == $(sort -u <<<"$out") ]] || { echo "některá čísla se ve výstupu opakují:" $out; exit 1; }
+[[ -z $(uniq -D <<<"$out") ]] { echo "některá čísla se ve výstupu opakují:" $(uniq -D <<<"$out"|uniq -c); echo "$out1"; exit 1; }
