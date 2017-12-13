@@ -14,4 +14,4 @@ echo $(cut -c 1-80 <<<"$out2")...
 
 out=$(tr ' ' '\n' <<<"$out1" | sort) 
 
-[[ -z $(uniq -D <<<"$out") ]] { echo "některá čísla se ve výstupu opakují:" $(uniq -D <<<"$out"|uniq -c); echo "$out1"; exit 1; }
+[[ -z $(uniq -D <<<"$out") ]] || { echo "některá čísla se ve výstupu opakují:" $(uniq -D <<<"$out"|uniq -c); echo "$out1"; exit 1; }
