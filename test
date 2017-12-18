@@ -1,20 +1,20 @@
 #!/bin/bash
 
-[[ -f /data/.mainclass ]] ||  { echo -e "\n$ java\nChyba: program není možno spustit, neboť se jej nepodařilo zkompilovat"; exit 1; }
-[[ $(cat /data/.mainclass | wc -l) -ne 0 ]] ||  { echo -e "\n$ java ...\nChyba: program není možno spustit, neboť chybí metoda main()"; exit 1; }
+[[ -f /data/.mainclass ]] ||  { echo -e "\n$ java\nChyba: program není možno spustit, neboť se jej nepodařilo zkompilovat"; exit 11; }
+[[ $(cat /data/.mainclass | wc -l) -ne 0 ]] ||  { echo -e "\n$ java ...\nChyba: program není možno spustit, neboť chybí metoda main()"; exit 11; }
 
 main=$(head -1 /data/.mainclass)
 echo "$ java $main"
-out1=$(cd /data/build; java "$main") || exit 1
+out1=$(cd /data/build; java "$main") || exit 11
 head -c 70 <<<"$out1"
 echo ...
 
 out=$(tr ' ' '\n' <<<"$out1" | sort)
-[[ -z $(uniq -D <<<"$out") ]] || { echo "některá čísla se ve výstupu opakují:" $(uniq -D <<<"$out"|uniq -c); echo "$out1"; exit 1; }
+[[ -z $(uniq -D <<<"$out") ]] || { echo "některá čísla se ve výstupu opakují:" $(uniq -D <<<"$out"|uniq -c); echo "$out1"; exit 11; }
 
 echo "$ java $main"
-out2=$(cd /data/build; java "$main") || exit 1
+out2=$(cd /data/build; java "$main") || exit 11
 head -c 70 <<<"$out2"
 echo ...
 
-[[ $out1 != $out2 ]] || { echo "program nevrací náhodná čísla, dvakrát vrátil to samé"; exit 1; }
+[[ $out1 != $out2 ]] || { echo "program nevrací náhodná čísla, dvakrát vrátil to samé"; exit 11; }
