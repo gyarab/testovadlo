@@ -18,9 +18,11 @@ Eliska Pomoranska
 EOF
 
 echo "$ java $main"
+echo "// ===== vstup ====="
 cat <<<"$input"
 
 out1=$(cd /data/build; java "$main" <<<"$input") || exit 11
+echo "// ===== vystup ====="
 head -c 800 <<<"$out1"
 
 #[[ $out1 != $out2 ]] || { echo "program nevrací náhodná čísla, dvakrát vrátil to samé"; exit 11; }
