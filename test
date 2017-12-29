@@ -22,7 +22,6 @@ Anezka Ceska Bozena Nemcova Eliska Pomoranska Jan Lana Jara Cimrman Kejchal Trpa
 Anezka Ceska Jara Cimrman Jan Lana Bozena Nemcova Premysl Orac Eliska Pomoranska Ruzenka Sipkova Marie Terezie Kejchal Trpaslik Pepa Zdepa
 EOF
 
-
 echo "$ java $main"
 echo "// ===== vstup ====="
 cat <<<"$input"
@@ -31,8 +30,12 @@ out1=$(cd /data/build; java "$main" <<<"$input") || exit 11
 echo "// ===== vystup ====="
 head -c 800 <<<"$out1"
 
-echo "// ===== vystup ====="
-
-[[ $(xargs <<<"$out1") == $(xargs <<<"$output") ]] || { echo "// ==== chyba: spatne poradi"; exit 11; }
-
-#[[ $out1 != $out2 ]] || { echo "program nevrací náhodná čísla, dvakrát vrátil to samé"; exit 11; }
+if [[ ! -z $(comm -2 -3 <(xargs <<<"$out1" | tr ' ' '\n' | sort -u ) <(xargs <<<"$output" | tr ' ' '\n' | sort -u)) ]]
+then
+	echo "// chyba: výstup obsauje i jiná slova než zadaná jména"
+	exit 11
+elif [[ $(xargs <<<"$out1") != $(xargs <<<"$output") ]]
+then
+	echo "// chyba: špatné pořadí jmen"
+	exit 11
+fi
