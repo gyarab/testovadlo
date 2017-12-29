@@ -18,27 +18,8 @@ Eliska Pomoranska
 EOF
 
 read -r -d '' output <<- EOF
-Anezka Ceska
-Bozena Nemcova
-Eliska Pomoranska
-Jan Lana
-Jara Cimrman
-Kejchal Trpaslik
-Marie Terezie
-Pepa Zdepa
-Premysl Orac
-Ruzenka Sipkova
-
-Anezka Ceska
-Jara Cimrman
-Jan Lana
-Bozena Nemcova
-Premysl Orac
-Eliska Pomoranska
-Ruzenka Sipkova
-Marie Terezie
-Pepa Zdepa
-Kejchal Trpaslik
+Anezka Ceska Bozena Nemcova Eliska Pomoranska Jan Lana Jara Cimrman Kejchal Trpaslik Marie Terezie Pepa Zdepa Premysl Orac Ruzenka Sipkova
+Anezka Ceska Jara Cimrman Jan Lana Bozena Nemcova Premysl Orac Eliska Pomoranska Ruzenka Sipkova Marie Terezie Kejchal Trpaslik Pepa Zdepa
 EOF
 
 
@@ -50,6 +31,8 @@ out1=$(cd /data/build; java "$main" <<<"$input") || exit 11
 echo "// ===== vystup ====="
 head -c 800 <<<"$out1"
 
-[[ $(xargs <<<"$out1") == $(xargs <<<"$output") ]] || { echo "chyba: spatne poradi"; exit 11; }
+echo "// ===== vystup ====="
+
+[[ $(xargs <<<"$out1") == $(xargs <<<"$output") ]] || { echo "// ==== chyba: spatne poradi"; exit 11; }
 
 #[[ $out1 != $out2 ]] || { echo "program nevrací náhodná čísla, dvakrát vrátil to samé"; exit 11; }
