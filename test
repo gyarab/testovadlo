@@ -12,9 +12,19 @@ echo "..."
 
 if grep -q 'nema pribor' <<<"$out1"
 then
-	grep 'nema pribor' <<<"$out1"
-	echo -e "\n #chyba: jíst bez příboru se nesmí!"
+	grep 'nema pribor' <<<"$out1" | head
+	echo -e "\nChyba: jíst bez příboru se nesmí!"
 	exit 11
 fi
 
-#test1=$(sort <<<"$out1" | grep ' obedva$' | uniq -c | head -c 800
+if grep -q 'ktera neni jeho' <<<"$out1"
+then
+	grep 'ktera neni jeho' <<<"$out1" | head
+	echo -e "\nChyba: zloděj, chyťe ho!!!"
+	exit 11
+fi
+
+test1=$(sort <<<"$out1" | grep ' obedva$' | uniq -c | head)
+
+echo "Statistika najedenosti:"
+cat <<<"$test1"

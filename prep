@@ -44,9 +44,9 @@ public class Vidlicka {
 
     void pockej() {
         try {
-            sleep(100);
+            Thread.sleep(100);
         } catch(InterruptedException ex) {
-            interrupt();
+            Thread.currentThread().interrupt();
         }
     }
 
