@@ -2,6 +2,9 @@
 
 [[ ! -f /data/unpack/Main.java ]] || { echo -e "Chyba: třídu Main neodevzdávejte, jen třidu Filozof"; exit 11; }
 [[ ! -f /data/unpack/Vidlicka.java ]] || { echo -e "Chyba: třídu Vidlicka neodevzdávejte, jen třidu Filozof"; exit 11; }
+[[ -f /data/unpack/Filozof.java ]] || { echo -e "Chyba: chybí třida Filozof"; exit 11; }
+
+perl -pe 's/^package .*;//' /data/unpack/*.java
 
 cat > /data/unpack/Main.java <<EOF
 public class Main {
