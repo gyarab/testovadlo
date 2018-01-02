@@ -6,6 +6,15 @@ main=$(head -1 /data/.mainclass)
 
 echo "$ java $main   # timeout 15s"
 
-out1=$(cd /data/build; timeout 15 java "$main") || true
+out1=$(cd /data/build; timeout --foreground 15 java "$main") || true
+head <<<"$out1"
+echo "..."
 
-sort <<<"$out1" | uniq -c | head -c 800
+if grep -q 'nema pribor' <<<"$out1"
+then
+	grep 'nema pribor' <<<"$out1"
+	echo -e "\n #chyba: jíst bez příboru se nesmí!"
+	exit 11
+fi
+
+#test1=$(sort <<<"$out1" | grep ' obedva$' | uniq -c | head -c 800

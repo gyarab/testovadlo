@@ -1,0 +1,81 @@
+#!/bin/bash
+
+[[ ! -f /data/unpack/Main.java ]] || { echo -e "Chyba: třídu Main neodevzdávejte, jen třidu Filozof"; exit 11; }
+[[ ! -f /data/unpack/Vidlicka.java ]] || { echo -e "Chyba: třídu Vidlicka neodevzdávejte, jen třidu Filozof"; exit 11; }
+
+cat > /data/unpack/Main.java <<EOF
+public class Main {
+    public static void main(String[] args) {
+        Vidlicka va, vb, vc, vd, ve;
+
+        va = new Vidlicka("a");
+        vb = new Vidlicka("b");
+        vc = new Vidlicka("c");
+        vd = new Vidlicka("d");
+        ve = new Vidlicka("e");
+
+        Filozof fa, fb, fc, fd, fe;
+
+        fa = new Filozof("A", ve, va);
+        fb = new Filozof("B", va, vb);
+        fc = new Filozof("C", vb, vc);
+        fd = new Filozof("D", vc, vd);
+        fe = new Filozof("E", vd, ve);
+
+        fa.start();
+        fb.start();
+        fc.start();
+        fd.start();
+        fe.start();
+    }
+}
+EOF
+
+
+cat > /data/unpack/Vidlicka.java <<EOF
+public class Vidlicka {
+    protected String jmeno;
+    protected Filozof maJi;
+
+    public Vidlicka(String j) {
+        jmeno = j;
+        maJi = null;
+    }
+
+    void pockej() {
+        try {
+            sleep(100);
+        } catch(InterruptedException ex) {
+            interrupt();
+        }
+    }
+
+    public synchronized boolean mamJi(Filozof f) {
+        return f == maJi;
+    }
+
+    public synchronized boolean vezmi(Filozof f) {
+        pockej();
+
+        if (maJi == null) {
+            System.out.println(f + " bere " + jmeno);
+
+            maJi = f;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public synchronized void poloz(Filozof f) {
+        if (maJi == f) {
+            System.out.println(f + " poklada " + jmeno);
+            maJi = null;
+            pockej();
+        } else {
+            System.out.println(f + " poklada " + jmeno + ", ktera neni jeho");
+        }
+    }  
+}
+EOF
+
