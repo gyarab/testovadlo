@@ -12,7 +12,7 @@ tick = datetime.timedelta(seconds=1)
 too_fast = datetime.timedelta(minutes=10)
 
 if __name__ == "__main__":
-    print("\nHistorie:")
+    print("$ testovadlo history")
 
     with open("/data/arg0.json") as f:
         curr = json.load(f)
