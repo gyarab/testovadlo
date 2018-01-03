@@ -95,7 +95,7 @@ if __name__ == "__main__":
             hist[prev] = { **hist[prev], **hist[ts] }
             del hist[ts]
 
-        prev = k
+        prev = ts
 
     prev = None
     for ts in sorted(hist):
