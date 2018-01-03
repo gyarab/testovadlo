@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo -e "\nTesty:"
+
 [[ -f /data/.mainclass ]] ||  { echo -e "\n$ java\nChyba: program není možno spustit, neboť se jej nepodařilo zkompilovat"; exit 11; }
 [[ $(cat /data/.mainclass | wc -l) -ne 0 ]] ||  { echo -e "\n$ java ...\nChyba: program není možno spustit, neboť chybí metoda main()"; exit 11; }
 
