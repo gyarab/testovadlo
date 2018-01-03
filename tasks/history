@@ -4,49 +4,116 @@ import json
 import os
 import re
 import datetime
+import dateparser
 
 hist = dict()
 
+tick = datetime.timedelta(seconds=1)
+too_fast = datetime.timedelta(minutes=10)
 
 if __name__ == "__main__":
-    print("Historie:")
+    print("\nHistorie:")
 
-    with open(f"/data/arg0.json") as f:
-        odpoved = json.load(f)
+    with open("/data/arg0.json") as f:
+        curr = json.load(f)
+
+        while curr:
+            ts = datetime.datetime.fromtimestamp(int(curr['created']))
+            while ts in hist:
+                ts += tick
+
+            if curr['val']['type'] == 'files':
+                hist[ts] = dict(type="odpověď", files=[x['name'] for x in curr['val']['val']])
+            else:
+                hist[ts] = dict(type="odpověď")
+
+            curr = curr['prev']
+
+
 
     with open(f"/data/arg1.json") as f:
-        hodnoceni = json.load(f)
+        curr = json.load(f)
+
+        while curr:
+            ts = datetime.datetime.fromtimestamp(int(curr['created']))
+            while ts in hist:
+                ts += tick
+
+            hist[ts] = dict(type='hodnocení', mark=curr['val']['val'])
+            curr = curr['prev']
 
     with open(f"/data/arg2.json") as f:
-        hodnoceniPozn = json.load(f)
+        curr = json.load(f)
 
-    curr = odpoved
-    while curr:
-        if curr['val']['type'] == 'files':
-            hist[curr['created']] = "  nová odpověď: {}".format(", ".join([x['name'] for x in curr['val']['val']]))
+        while curr:
+            ts = datetime.datetime.fromtimestamp(int(curr['created']))
+            while ts in hist:
+                ts += tick
+
+            hist[ts] = dict(type='hodnocení', msg=curr['val']['val'])
+            curr = curr['prev']
+
+
+    try:
+        with open("/data/arg3.json") as f:
+            tmp = json.load(f)
+        ts1 = dateparser.parse(tmp['val'])
+
+        try:
+            with open("/data/arg4.json") as f:
+                tmp = json.load(f)
+            ts2 = dateparser.parse(tmp['val'])
+        except:
+            ts2 = ts1 + datetime.timedelta(days=7)
+
+        try:
+            with open("/data/arg5.json") as f:
+                tmp = json.load(f)
+            ts3 = dateparser(tmp['val'])
+        except:
+            ts3 = ts2 + datetime.timedelta(days=7)
+
+        while ts1 in hist:
+            ts1 += tick
+        hist[ts1] = {'type': 'datum zadání'}
+
+        while ts2 in hist:
+            ts2 += tick
+        hist[ts2] = {'type': 'datum odevzdání'}
+
+        while ts3 in hist:
+            ts3 += tick
+        hist[ts3] = {'type': 'datum pozdního odevzdání'}
+
+    except:
+        pass
+
+    # consolidate msgs
+    prev = None
+    for ts in sorted(hist):
+        if prev and ts - prev < too_fast and hist[prev]['type'] == hist[ts]['type']:
+            hist[prev] = { **hist[prev], **hist[ts] }
+            del hist[ts]
+
+        prev = k
+
+    prev = None
+    for ts in sorted(hist):
+        msg = hist[ts]['type']
+
+        if hist[ts]['type'] == 'odpověď' and 'files' in hist[ts]:
+            msg += ": {}".format(", ".join(hist[ts]['files']))
+        elif hist[ts]['type'] == 'hodnocení':
+            msg += ":"
+
+            if 'mark' in hist[ts]:
+                msg += ' {}%'.format(hist[ts]['mark'])
+            if 'msg' in hist[ts]:
+                msg += ' {}'.format(hist[ts]['msg'])
+
+        if prev:
+            print("{} (+{}):\t{}".format(ts.strftime('%Y-%m-%d %H:%M'), ts-prev, msg))
         else:
-            hist[curr['created']] = "  nová odpověď"
+            print("{}:\t\t{}".format(ts.strftime('%Y-%m-%d %H:%M'), msg))
 
-        curr = curr['prev']
-
-    curr = hodnoceni
-    while curr:
-        hist[curr['created']] = "  hodnoceni: {}%".format(curr['val']['val'])
-        curr = curr['prev']
-
-    curr = hodnoceniPozn
-    while curr:
-        hist[curr['created']] = "  hodnoceni: {}".format(curr['val']['val'])
-        curr = curr['prev']
-
-
-    ts_prev = None
-    for k in sorted(hist):
-        ts = datetime.datetime.fromtimestamp(int(k))
-
-        if ts_prev:
-            print("{} (+{}):\t{}".format(ts.strftime('%Y-%m-%d %H:%M'), ts-ts_prev, hist[k]))
-        else:
-            print("{}:\t\t{}".format(ts.strftime('%Y-%m-%d %H:%M'), hist[k]))
-
-        ts_prev = ts
+        prev = ts
