@@ -1,0 +1,52 @@
+#!/usr/bin/python
+
+import json
+import os
+import re
+import datetime
+
+hist = dict()
+
+
+if __name__ == "__main__":
+    print("Historie:")
+
+    with open(f"/data/arg0.json") as f:
+        odpoved = json.load(f)
+
+    with open(f"/data/arg1.json") as f:
+        hodnoceni = json.load(f)
+
+    with open(f"/data/arg2.json") as f:
+        hodnoceniPozn = json.load(f)
+
+    curr = odpoved
+    while curr:
+        if curr['val']['type'] == 'files':
+            hist[curr['created']] = "  nová odpověď: {}".format(", ".join([x['name'] for x in curr['val']['val']]))
+        else:
+            hist[curr['created']] = "  nová odpověď"
+
+        curr = curr['prev']
+
+    curr = hodnoceni
+    while curr:
+        hist[curr['created']] = "  hodnoceni: {}%".format(curr['val']['val'])
+        curr = curr['prev']
+
+    curr = hodnoceniPozn
+    while curr:
+        hist[curr['created']] = "  hodnoceni: {}".format(curr['val']['val'])
+        curr = curr['prev']
+
+
+    ts_prev = None
+    for k in sorted(hist):
+        ts = datetime.datetime.fromtimestamp(int(k))
+
+        if ts_prev:
+            print("{} (+{}):\t{}".format(ts.strftime('%Y-%m-%d %H:%M'), ts-ts_prev, hist[k]))
+        else:
+            print("{}:\t\t{}".format(ts.strftime('%Y-%m-%d %H:%M'), hist[k]))
+
+        ts_prev = ts
