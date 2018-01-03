@@ -5,5 +5,5 @@ set -e
 echo "$ test"
 
 main=$(head -1 /data/.mainclass)
-echo -e "$ java $main\n    5"
+echo -e "$ java $main\n  5"
 echo -e "5\n\n" | (cd /data/build; java "$main") || exit 11
