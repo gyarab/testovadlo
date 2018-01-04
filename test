@@ -1,0 +1,34 @@
+#!/bin/bash
+
+main=$(head -1 /data/.mainclass)
+
+read -r -d '' input <<- EOF
+leden
+unor
+brezen
+duben
+kveten
+cerven
+cervenec
+srpen
+zari
+rijen
+EOF
+
+output=$(tac <<<"$input")
+
+echo "$ java $main"
+echo "// ===== vstup ====="
+cat <<<"$input"
+
+out1=$(cd /data/build; java "$main" <<<"$input") || exit 11
+echo "// ===== vystup ====="
+head -c 800 <<<"$out1"
+
+out1_filtered=$(grep -f <(echo "$input") <<<"$out1")
+
+if [[ $(xargs <<<"$out1_filtered") != $(xargs <<<"$output") ]]
+then
+	echo -e "\nChyba: špatné pořadí slov"
+	exit 11
+fi
