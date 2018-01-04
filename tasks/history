@@ -12,7 +12,7 @@ tick = datetime.timedelta(seconds=1)
 too_fast = datetime.timedelta(minutes=10)
 
 if __name__ == "__main__":
-    print("\nHistorie:")
+    print("$ testovadlo history")
 
     with open("/data/arg0.json") as f:
         curr = json.load(f)
@@ -94,8 +94,8 @@ if __name__ == "__main__":
         if prev and ts - prev < too_fast and hist[prev]['type'] == hist[ts]['type']:
             hist[prev] = { **hist[prev], **hist[ts] }
             del hist[ts]
-
-        prev = k
+        else:
+            prev = ts
 
     prev = None
     for ts in sorted(hist):
