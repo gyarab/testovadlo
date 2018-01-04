@@ -94,8 +94,8 @@ if __name__ == "__main__":
         if prev and ts - prev < too_fast and hist[prev]['type'] == hist[ts]['type']:
             hist[prev] = { **hist[prev], **hist[ts] }
             del hist[ts]
-
-        prev = ts
+        else:
+            prev = ts
 
     prev = None
     for ts in sorted(hist):
