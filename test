@@ -1,0 +1,7 @@
+#!/bin/bash
+
+main=$(head -1 /data/.mainclass)
+
+echo "$ java $main"
+out1=$(cd /data/build; java "$main" <<<"$input") || exit 11
+head -c 800 <<<"$out1"
