@@ -1,0 +1,19 @@
+#!/bin/bash
+
+main=$(head -1 /data/.mainclass)
+
+echo "$ java $main"
+
+out1=$(cd /data/build; java "$main" <<<"$input") || exit 11
+head -c 800 <<<"$out1"
+
+echo "$ ls slovnik.*"
+out1=$(cd /data/build; ls slovnik.*) || exit 11
+head -c 800 <<<"$out1"
+
+if [[ -f /data/build/slovnik.xml ]]
+then
+	echo "$ cat slovnik.xml"
+	out1=$(cd /data/build; cat slovnik.xml) || exit 11
+	head -c 800 <<<"$out1"
+fi
