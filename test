@@ -6,7 +6,7 @@ main=$(head -1 /data/.mainclass)
 jars=( . $(find / -maxdepth 1 -type f -name '*.jar') )
 
 echo "$ java -cp $(jj "${jars[@]#/}") $main"
-(cd /data/build; java -cp $(jj "${jars[@]}") "$main") & || exit 11
+(cd /data/build; java -cp $(jj "${jars[@]}") "$main") &
 
 sleep 0.25
 
