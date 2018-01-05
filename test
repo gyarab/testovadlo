@@ -6,5 +6,5 @@ main=$(head -1 /data/.mainclass)
 jars=( . $(find / -maxdepth 1 -type f -name '*.jar') )
 
 echo "$ java " $([[ -z "${jars[@]}" ]] || echo "-cp"  $(jj "${jars[@]#/}")) $main
-out1=$(cd /data/build; java $([[ -z "${jars[@]}" ]] || echo "-classpath" $(jj "${jars[@]}")) "$main") || exit 11
+out1=$(cd /data/build; java $([[ -z "${jars[@]}" ]] || echo "-classpath" $(jj "${jars[@]}")) "$main" 2>&1|grep -v "^WARNING') || exit 11
 head -c 800 <<<"$out1"
