@@ -16,6 +16,6 @@ head -c 800 <<<"$out1"
 if [[ -f /data/build/slovnik.xml ]]
 then
 	echo "$ cat slovnik.xml"
-	out1=$(xmllint --format /data/buil/slovnik.xml) || exit 11
+	out1=$(xmllint --format /data/build/slovnik.xml) || exit 11
 	head -c 800 <<<"$out1"
 fi
