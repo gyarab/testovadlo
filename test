@@ -7,15 +7,15 @@ jars=( . $(find / -maxdepth 1 -type f -name '*.jar') )
 
 echo "$ java " $([[ -z "${jars[@]}" ]] || echo "-cp"  $(jj "${jars[@]#/}")) $main
 out1=$(cd /data/build; java $([[ -z "${jars[@]}" ]] || echo "-classpath" $(jj "${jars[@]}")) "$main") || exit 11
-head -c 800 <<<"$out1"
+#head -c 800 <<<"$out1"
 
-echo "$ ls slovnik.*"
-out1=$(cd /data/build; ls slovnik.*) || exit 11
+echo "$ ls -l slovnik.*"
+out1=$(cd /data/build; ls -l slovnik.*) || exit 11
 head -c 800 <<<"$out1"
 
 if [[ -f /data/build/slovnik.xml ]]
 then
 	echo "$ cat slovnik.xml"
-	out1=$(cd /data/build; cat slovnik.xml) || exit 11
+	out1=$(xmllint --format /data/buil/slovnik.xml) || exit 11
 	head -c 800 <<<"$out1"
 fi
