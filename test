@@ -4,6 +4,6 @@
 [[ $(cat /data/.mainclass | wc -l) -ne 0 ]] ||  { echo -e "\n$ java ...\nChyba: program není možno spustit, neboť chybí metoda main()"; exit 11; }
 main=$(head -1 /data/.mainclass)
 
-echo "$ java $main
+echo "$ java $main"
 
 (cd /data/build; java "$main")
