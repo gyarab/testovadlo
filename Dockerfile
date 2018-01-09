@@ -19,3 +19,4 @@ RUN ln -s /tasks/unpack /test.d/01-unpack_arg0; \
 	ln -s /tasks/test_main /test.d/40-test_main
 
 COPY test /test.d/50-test
+RUN chmod a+x /test.d/50-test
