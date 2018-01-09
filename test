@@ -1,0 +1,42 @@
+#!/bin/bash
+
+[[ -f /data/.mainclass ]] ||  { echo -e "\n$ java\nChyba: program není možno spustit, neboť se jej nepodařilo zkompilovat"; exit 11; }
+[[ $(cat /data/.mainclass | wc -l) -ne 0 ]] ||  { echo -e "\n$ java ...\nChyba: program není možno spustit, neboť chybí metoda main()"; exit 11; }
+main=$(head -1 /data/.mainclass)
+
+echo "$ java $main   # timeout 15s"
+
+out1=$(cd /data/build; timeout --foreground 15 java "$main") || true
+head -n 20 <<<"$out1" | head -c 400
+echo "..."
+
+if grep -q 'nema pribor' <<<"$out1"
+then
+	grep 'nema pribor' <<<"$out1" | head
+	echo -e "\nChyba: jíst bez příboru se nesmí!"
+	exit 11
+fi
+
+if grep -q 'ktera neni jeho' <<<"$out1"
+then
+	grep 'ktera neni jeho' <<<"$out1" | head
+	echo -e "\nChyba: zloděj, chyťe ho!!!"
+	exit 11
+fi
+
+test1=$(sort <<<"$out1" | grep ' obedva$' | uniq -c | head)
+
+echo "Statistika najedenosti:"
+cat <<<"$test1"
+
+test1a=$(perl -ne 'print $1 if /\s+(\d+) F:A obedva/' <<<"$test1")
+test1b=$(perl -ne 'print $1 if /\s+(\d+) F:B obedva/' <<<"$test1")
+test1c=$(perl -ne 'print $1 if /\s+(\d+) F:C obedva/' <<<"$test1")
+test1d=$(perl -ne 'print $1 if /\s+(\d+) F:D obedva/' <<<"$test1")
+test1e=$(perl -ne 'print $1 if /\s+(\d+) F:E obedva/' <<<"$test1")
+
+[[ ! -z $test1a ]] || { echo -e "\nChyba: filozof A umřel hlady!"; exit 11; }
+[[ ! -z $test1b ]] || { echo -e "\nChyba: filozof B umřel hlady!"; exit 11; }
+[[ ! -z $test1c ]] || { echo -e "\nChyba: filozof C umřel hlady!"; exit 11; }
+[[ ! -z $test1d ]] || { echo -e "\nChyba: filozof D umřel hlady!"; exit 11; }
+[[ ! -z $test1e ]] || { echo -e "\nChyba: filozof E umřel hlady!"; exit 11; }
