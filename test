@@ -1,0 +1,9 @@
+#!/bin/bash
+
+function jj { local IFS=":"; echo "$*"; }
+
+main=$(head -1 /data/.mainclass)
+jars=( . $(find / -maxdepth 1 -type f -name '*.jar') )
+
+echo "$ java -cp $(jj "${jars[@]#/}") $main"
+(cd /data/build; java -cp $(jj "${jars[@]}") "$main") 
