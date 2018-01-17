@@ -3,7 +3,7 @@ FROM jenda1/testovadlo
 #
 # Initialization
 #
-RUN pip3 install dateparser
+RUN pip3 install dateparser matplotlib numpy
 
 RUN mkdir -p /output
 COPY tasks/* /tasks/
@@ -12,10 +12,4 @@ COPY tasks/* /tasks/
 #
 # Tests
 #
-RUN ln -s /tasks/unpack /test.d/01-unpack_arg0; \
-	ln -s /tasks/compile /test.d/10-compile; \
-	ln -s /tasks/checkstyle /test.d/11-checkstyle; \
-	ln -s /tasks/history /test.d/19-history; \
-	ln -s /tasks/test_main /test.d/40-test_main
-
-COPY test /test.d/50-test
+RUN ln -s /tasks/marks /test.d/05-marks
