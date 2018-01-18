@@ -12,3 +12,4 @@ COPY tasks/* /tasks/
 #
 # Tests
 #
+RUN ln -s /tasks/history /test.d/19-history
