@@ -2,6 +2,7 @@
 
 import re
 import os
+import sys
 import json
 import datetime
 import dateutil.relativedelta
@@ -21,6 +22,7 @@ for fn in os.listdir("/data"):
         data[int(m.group(1))] = json.load(f)
 
 data = [data[k] for k in sorted(data.keys())]
+exitcode = 0
 
 while len(data):
     odpoved = data.pop(0)
@@ -48,9 +50,12 @@ while len(data):
 
     if hodnoceni is None:
         print("{}: nezkontrolováno, odezdáno před {}".format(name['val'], td))
+        exitcode = 11
         continue
 
     if hodnoceni['created'] < odpoved['created']:
         print("{}: opraveno před {}".format(name['val'], td))
-    
+        exitcode = 11
 
+if exitcode:
+    sys.exit(exitcode)
