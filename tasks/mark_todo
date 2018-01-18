@@ -1,0 +1,56 @@
+#!/usr/bin/python
+
+import re
+import os
+import json
+import datetime
+import dateutil.relativedelta
+
+now = datetime.datetime.now()
+
+fn_re = re.compile(r"^arg(\d+)\.json$")
+
+data = dict()
+for fn in os.listdir("/data"):
+    m = fn_re.match(fn)
+
+    if not m:
+        continue
+
+    with open(os.path.join("/data", fn)) as f:
+        data[int(m.group(1))] = json.load(f)
+
+data = [data[k] for k in sorted(data.keys())]
+
+while len(data):
+    odpoved = data.pop(0)
+    hodnoceni = data.pop(0)
+    name = data.pop(0)
+
+    if odpoved is None:
+        continue
+
+    ts = datetime.datetime.fromtimestamp(int(odpoved['created']))
+    rd = dateutil.relativedelta.relativedelta(now, ts)
+
+    if rd.years:
+        td = "{} let a {} měsíců".format(rd.years, rd.months)
+    elif rd.months:
+        td = "{} měsíců a {} dní".format(rd.months, rd.days)
+    elif rd.days:
+        td = "{} dní a {} hodin".format(rd.days, rd.hours)
+    elif rd.hours:
+        td = "{} hodin".format(rd.hours)
+    elif rd.minutes:
+        td = "{} minut".format(rd.minutes)
+    else:
+        td = "{} sekund".format(rd.seconds)
+
+    if hodnoceni is None:
+        print("{}: nezkontrolováno, odezdáno před {}".format(name['val'], td))
+        continue
+
+    if hodnoceni['created'] < odpoved['created']:
+        print("{}: opraveno před {}".format(name['val'], td))
+    
+
