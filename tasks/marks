@@ -100,4 +100,6 @@ else:
 plt.plot(out_avg, color='r', label="známka ({})".format(mark))
 plt.legend()
 
+print("prumer:\t{}%".format(avg))
+
 plt.savefig("/output/marks.png", dpi=300)
