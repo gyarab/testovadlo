@@ -17,7 +17,7 @@ if __name__ == "__main__":
     with open("/data/arg0.json") as f:
         curr = json.load(f)
 
-        while curr:
+        while curr and 'created' in curr:
             ts = datetime.datetime.fromtimestamp(int(curr['created']))
             while ts in hist:
                 ts += tick
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     with open(f"/data/arg1.json") as f:
         curr = json.load(f)
 
-        while curr:
+        while curr and 'created' in curr:
             ts = datetime.datetime.fromtimestamp(int(curr['created']))
             while ts in hist:
                 ts += tick
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     with open(f"/data/arg2.json") as f:
         curr = json.load(f)
 
-        while curr:
+        while curr and 'created' in curr:
             ts = datetime.datetime.fromtimestamp(int(curr['created']))
             while ts in hist:
                 ts += tick
