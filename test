@@ -13,4 +13,4 @@ cat <<<"$out"
 a=$(tr ' ' '\n' <<<"$out" | tr ',' '\n' | sort -u|xargs echo)
 b="Dd1 Jb1 Jg1 Ke1 pa2 pb2 pc2 pd2 pe2 pf2 pg2 ph2 Sc1 Sf1 Va1 Vh1"
 
-[[ $a == $b ]] || { echo "špatně!"; echo 11; }
+[[ $a == $b ]] || { echo "špatně!"; exit 11; }
