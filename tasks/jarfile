@@ -1,0 +1,3 @@
+#!/bin/bash
+
+jar -cfe /output/my.jar $(head -1 /data/.mainclass) -C /data/unpack . -C /data/build .
