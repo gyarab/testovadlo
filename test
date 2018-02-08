@@ -1,0 +1,26 @@
+#!/bin/bash
+
+function jj { local IFS=":"; echo "$*"; }
+
+main=$(head -1 /data/.mainclass)
+jars=( . $(find / -maxdepth 1 -type f -name '*.jar') )
+
+echo "$ java -cp $(jj "${jars[@]#/}") $main"
+(cd /data/build; java -cp $(jj "${jars[@]}") "$main") &
+
+sleep 1
+
+echo "$ test"
+(
+	curl -s http://127.0.0.1:8001 & t1=$!
+	sleep 1
+	curl -s http://127.0.0.1:8001 & t2=$!
+	sleep 5
+	curl -s http://127.0.0.1:8001 & t3=$!
+
+	wait $t1 || { ret=$?; [[ $ret == 56 ]] || { echo "Chyba: nepodařilo se spojit s programem na adrese 127.0.0.1:8001"; exit 11; }; }
+	wait $t2 || { ret=$?; [[ $ret == 56 ]] || { echo "Chyba: druhé spojení s programem se nevydařilo"; exit 11; }; }
+	wait $t3 || { ret=$?; [[ $ret == 56 ]] || { echo "Chyba: třetí spojení s programem se nevydařilo"; exit 11; }; }
+) || exit $?
+
+pkill java
