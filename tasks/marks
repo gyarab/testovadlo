@@ -28,7 +28,6 @@ data = [data[k] for k in sorted(data.keys())]
 data_sum = 0
 data_n = 0
 
-
 out_x = list()
 out_y = list()
 out_avg = list()
@@ -40,7 +39,10 @@ while len(data):
         val = None
     elif tmp['type'] == 'input' and tmp['val']['type'] == 'int':
         val = int(tmp['val']['val'])
+    elif tmp['type'] in ['int', 'float']:
+        val = tmp['val']
     else:
+        print(tmp)
         continue
 
     val_desc = str(len(out_x)+1)
