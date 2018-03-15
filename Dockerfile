@@ -17,7 +17,7 @@ RUN ln -s /tasks/unpack /test.d/01-unpack_arg0; \
 	ln -s /tasks/checkstyle /test.d/11-checkstyle; \
 	ln -s /tasks/history /test.d/19-history; \
 	ln -s /tasks/test_main /test.d/40-test_main; \
-	ln -s /tasks/jafile /test.d/41-jarfile
+	ln -s /tasks/jarfile /test.d/41-jarfile
 
 COPY test /test.d/50-test
 
